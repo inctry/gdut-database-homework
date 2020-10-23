@@ -6,6 +6,9 @@ let router = express.Router();               //放数据
 const firstQuery = require('../operation/firstQuery')
 const studentCount = require('../operation/studentCount')
 const firstRecruit = require('../operation/firstRecruit')
+const restStudentCount = require('../operation/restStudentCount');
+const secondQuery = require('../operation/secondQuery');
+const secondRecruit = require('../operation/secondRecruit')
 
 
 /* GET home page. */
@@ -36,24 +39,43 @@ router.get('/', async function (req, res, next) {
     //     )
     //     .then()
 
+    console.log("begin first recruit");
+    const STUDENT_NUMBER = await studentCount();
 
-    const STUDENTNUMBER = await studentCount();
+    // for(let i = 0; i < STUDENT_NUMBER; i++) {
+    //     let res = await firstQuery({
+    //         where: null,
+    //         order: " ORDER BY 排位",
+    //         limit: " LIMIT 1",
+    //         offset: ` OFFSET ${i}`
+    //     });
+    //     let isSuccess = await firstRecruit(res[0])
 
-    for(let i = 0; i < STUDENTNUMBER; i++) {
-        let res = await firstQuery({
-            where: null,
+    //     // if(!isSuccess) {
+    //     //     console.log('error when Recruiting');
+    //     // }
+    //     //  console.log(i);
+    // }
+
+    console.log("finish first recruit");
+
+    console.log("begin second recruit");
+
+    const REST_STUDENT_NUMBER = await restStudentCount()
+
+    console.log(REST_STUDENT_NUMBER);
+
+    for(let i = 0; i < REST_STUDENT_NUMBER; i++) {
+        let res = await secondQuery({
+            where: `WHERE 调剂 = 1 AND 最终专业 IS NULL`,
             order: " ORDER BY 排位",
             limit: " LIMIT 1",
             offset: ` OFFSET ${i}`
-        });
-        let isSuccess = await firstRecruit(res[0])
-        
-        // if(!isSuccess) {
-        //     console.log('error when Recruiting');
-        // }
-        //  console.log(i);
-
+        })
+        let isSuccess = await secondRecruit(res[0]);
+        if(!isSuccess) break;
     }
+
 
     // console.log(data);
     // let sql = 'SELECT * FROM UNIVERSITY'

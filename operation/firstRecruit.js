@@ -17,13 +17,24 @@ async function firstRecruit(stu) {
                 where: `WHERE 专业代号 = '${stu[key]}' `
             });
             res_num = res_num[0];
+            
+
             // console.log(res_num['招生计划数']);
             if(res_num['招生计划数'] > 0) {
                 let number = res_num['招生计划数'];
+
+                let data = {
+                    招生计划数: number-1
+                }
+
+                if(res_num['录取最低分'] === null || res_num['录取最低分'] > stu['总分']) {
+                    data['录取最低分'] = `${stu['总分']}`;
+                    data['招生计划数'] = `${number-1},`;
+                }
+
+
                 isSuccess = await university_copy.update({
-                    data: {
-                        招生计划数: number - 1
-                    },
+                    data,
                     where: `WHERE 专业代号 = '${stu[key]}' `
                 })
                 major = res_num['专业名称']

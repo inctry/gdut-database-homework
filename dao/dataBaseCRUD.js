@@ -50,6 +50,17 @@ class Table {
         let res = await connectToDataBase(sql);
         return res;
     }
+    async secondStudentCount() {
+        let sql = `SELECT COUNT(*) FROM ${this.tableName} WHERE 调剂 = 1 AND 最终专业 IS NULL`;
+        let res = await connectToDataBase(sql);
+        return res;
+    }
+    async secondUniversityCount() {
+        let sql = `SELECT COUNT(*) FROM ${this.tableName} WHERE 招生计划数 = 0 
+        ORDER BY 录取最低分`;
+        let res = await connectToDataBase(sql);
+        return res;   
+    }
 
 }
 module.exports = Table
