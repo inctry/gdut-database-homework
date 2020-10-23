@@ -11,6 +11,8 @@ const secondQuery = require('../operation/secondQuery');
 const secondRecruit = require('../operation/secondRecruit');
 const createTable = require('../operation/createTable')
 
+const student = require('../table_element/student');
+
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
@@ -40,7 +42,7 @@ router.get('/', async function (req, res, next) {
     //     )
     //     .then()
 
-    createTable();
+    await createTable();
 
     console.log("begin first recruit");
     const STUDENT_NUMBER = await studentCount();
@@ -75,11 +77,16 @@ router.get('/', async function (req, res, next) {
             limit: " LIMIT 1",
             offset: ` OFFSET ${i}`
         })
+         console.log(res.length);
+        if(res.length === 0) break;
         let isSuccess = await secondRecruit(res[0]);
         if(!isSuccess) break;
     }
 
     console.log("end second recruit");
+    res.json(await student.retrive({
+        where: 'WHERE 最终专业 IS NOT NULL'
+    }) );
 
     // console.log(data);
     // let sql = 'SELECT * FROM UNIVERSITY'

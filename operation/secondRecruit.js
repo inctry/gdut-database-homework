@@ -5,8 +5,7 @@ let university_copy = require('../table_element/university_copy')
 
 async function secondRecruit(stu) {
 
-    // console.log(stu);
-    
+
     let mark = false;
 
     let major = await university_copy.retrive({
@@ -15,10 +14,9 @@ async function secondRecruit(stu) {
         limit: " LIMIT 1"
     })
 
-    // console.log(major);
-    major = major[0];
 
     if(major.length === 0) return false;
+    major = major[0];
     
     mark = await university_copy.update({
         data: {
