@@ -42,10 +42,10 @@ router.get('/', async function (req, res, next) {
     //     )
     //     .then()
 
-    await createTable();
+     await createTable();
 
-    console.log("begin first recruit");
-    const STUDENT_NUMBER = await studentCount();
+     console.log("begin first recruit");
+     const STUDENT_NUMBER = await studentCount();
 
     for(let i = 0; i < STUDENT_NUMBER; i++) {
         let res = await firstQuery({
@@ -75,10 +75,9 @@ router.get('/', async function (req, res, next) {
             where: `WHERE 调剂 = 1 AND 最终专业 IS NULL`,
             order: " ORDER BY 排位",
             limit: " LIMIT 1",
-            offset: ` OFFSET ${i}`
         })
-         console.log(res.length);
         if(res.length === 0) break;
+        console.log(res[0]);
         let isSuccess = await secondRecruit(res[0]);
         if(!isSuccess) break;
     }
