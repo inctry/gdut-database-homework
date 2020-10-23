@@ -48,7 +48,8 @@ async function firstRecruit(stu) {
     if(isSuccess === true) {
         let suc = student.update({
             data: {
-                最终专业: `'${major}'`
+                最终专业: `'${major}',`,
+                录取情况: `'拟录取'`
             },
             where: `WHERE 姓名 = '${stu['姓名']}' and 排位 = ${stu['排位']}`
         })

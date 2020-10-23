@@ -8,7 +8,8 @@ const studentCount = require('../operation/studentCount')
 const firstRecruit = require('../operation/firstRecruit')
 const restStudentCount = require('../operation/restStudentCount');
 const secondQuery = require('../operation/secondQuery');
-const secondRecruit = require('../operation/secondRecruit')
+const secondRecruit = require('../operation/secondRecruit');
+const createTable = require('../operation/createTable')
 
 
 /* GET home page. */
@@ -39,23 +40,25 @@ router.get('/', async function (req, res, next) {
     //     )
     //     .then()
 
+    createTable();
+
     console.log("begin first recruit");
     const STUDENT_NUMBER = await studentCount();
 
-    // for(let i = 0; i < STUDENT_NUMBER; i++) {
-    //     let res = await firstQuery({
-    //         where: null,
-    //         order: " ORDER BY 排位",
-    //         limit: " LIMIT 1",
-    //         offset: ` OFFSET ${i}`
-    //     });
-    //     let isSuccess = await firstRecruit(res[0])
+    for(let i = 0; i < STUDENT_NUMBER; i++) {
+        let res = await firstQuery({
+            where: null,
+            order: " ORDER BY 排位",
+            limit: " LIMIT 1",
+            offset: ` OFFSET ${i}`
+        });
+        let isSuccess = await firstRecruit(res[0])
 
-    //     // if(!isSuccess) {
-    //     //     console.log('error when Recruiting');
-    //     // }
-    //     //  console.log(i);
-    // }
+        // if(!isSuccess) {
+        //     console.log('error when Recruiting');
+        // }
+        //  console.log(i);
+    }
 
     console.log("finish first recruit");
 
@@ -76,6 +79,7 @@ router.get('/', async function (req, res, next) {
         if(!isSuccess) break;
     }
 
+    console.log("end second recruit");
 
     // console.log(data);
     // let sql = 'SELECT * FROM UNIVERSITY'

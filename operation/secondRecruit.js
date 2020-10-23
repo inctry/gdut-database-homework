@@ -5,7 +5,7 @@ let university_copy = require('../table_element/university_copy')
 
 async function secondRecruit(stu) {
 
-    console.log(stu);
+    // console.log(stu);
     
     let mark = false;
 
@@ -15,7 +15,7 @@ async function secondRecruit(stu) {
         limit: " LIMIT 1"
     })
 
-    console.log(major);
+    // console.log(major);
     major = major[0];
 
     if(major.length === 0) return false;
@@ -25,6 +25,13 @@ async function secondRecruit(stu) {
             招生计划数: major['招生计划数'] - 1
         },
         where: `WHERE 专业代号 = '${major['专业代号']}'`
+    })
+    mark = await student.update({
+        data: {
+            最终专业: `'${major['专业名称']}',`,
+            录取情况: `'调剂录取'`
+        },
+        where: `WHERE 姓名 = '${stu['姓名']}' and 排位 = ${stu['排位']}`
     })
 
     return true;
