@@ -1,25 +1,15 @@
 let express = require('express');           //使用express
 let router = express.Router();               //放数据
-let mysql = require('mysql')
-let db = require('../config/dataBase')
-const Promise = require('bluebird');
-let Table = require('../dao/dataBaseCRUD');
-let connectToDataBase = require('../dao/connectToDataBase');
-const { resolve } = require('bluebird');
 
+
+
+const firstQuery = require('../operation/firstQuery')
+const studentCount = require('../operation/studentCount')
+const firstRecruit = require('../operation/firstRecruit')
 
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-
-    //  const pool = mysql.createPool(db)
-    // pool.getConnection((err, con) => {
-    //     if(err) {
-    //         console.log(err);
-    //     } else {
-    //         console.log(1);
-    //     }
-    // })
+router.get('/', async function (req, res, next) {
     // let newobj = Promise.promisifyAll(Table);
 
 
@@ -31,28 +21,39 @@ router.get('/', function (req, res, next) {
     //     .then(console.log)
 
 
-    let university = new Table('university')
-    university = Promise.promisifyAll(university); 
-    
-    let student = new Table('student')
-    student = Promise.promisifyAll(student)
     // make it all function into promise
-    connectToDataBase = Promise.promisify(connectToDataBase)
+    // connectToDataBase = Promise.promisify(connectToDataBase)
     //   why? I can't figure out on the Internet !!!!
 
-    university.retriveAsync({where: null})
-        .then(sql => connectToDataBase(sql))
-        .then(
-            (result) => console.log(result),
-            (err) => {
-                console.log(err);
-                throw err;
-            }
-        )
-        .then()
+    // university.retriveAsync({where: null})
+    //     .then(sql => connectToDataBase(sql))
+    //     .then(
+    //         (result) => console.log(result),
+    //         (err) => {
+    //             console.log(err);
+    //             throw err;
+    //         }
+    //     )
+    //     .then()
 
 
+    const STUDENTNUMBER = await studentCount();
 
+    for(let i = 0; i < STUDENTNUMBER; i++) {
+        let res = await firstQuery({
+            where: null,
+            order: " ORDER BY 排位",
+            limit: " LIMIT 1",
+            offset: ` OFFSET ${i}`
+        });
+        let isSuccess = await firstRecruit(res[0])
+        
+        // if(!isSuccess) {
+        //     console.log('error when Recruiting');
+        // }
+        //  console.log(i);
+
+    }
 
     // console.log(data);
     // let sql = 'SELECT * FROM UNIVERSITY'

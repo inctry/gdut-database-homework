@@ -1,6 +1,7 @@
 
 const debug = require('debug')
 const Promise = require('bluebird')
+const connectToDataBase = require('./connectToDataBase')
 
 
 
@@ -9,12 +10,45 @@ class Table {
         this.tableName = tableName;
     }
 
-    retrive(state, callback) {
-        let sql = `SELECT * FROM ${this.tableName}`;
-        if(state.where !== null) {
+    async retrive(state) {
+        let sql = `SELECT * FROM ${this.tableName} `;
+
+        if(state.where !== null && state.where !== undefined) {
             sql += state.where;
         }
-        callback(null, sql)
+        if(state.order !== null && state.order !== undefined) {
+            sql += state.order;
+        }
+        if(state.limit !== null && state.limit !== undefined) {
+            sql += state.limit;
+        }
+        if(state.offset !== null && state.offset !== undefined) {
+            sql += state.offset;
+        }
+        //   console.log(sql);
+        let res = await connectToDataBase(sql)
+        //  console.log(res);
+        return res;
+    }
+    async update(state) {
+        let sql = `UPDATE ${this.tableName} SET `;
+        for(let key in state.data) {
+            sql += ` ${key} = ${state.data[key]} `;
+        }
+        if(state.where !== null && state.where !== undefined) {
+            sql += state.where;
+        }
+        // console.log(sql);
+
+         let res = await connectToDataBase(sql);
+
+        //  console.log(res.protocol41);
+        return res.protocol41;
+    }
+    async rowCount() {
+        let sql = `SELECT COUNT(*) FROM ${this.tableName}`;
+        let res = await connectToDataBase(sql);
+        return res;
     }
 
 }

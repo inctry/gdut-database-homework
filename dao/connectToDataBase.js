@@ -1,19 +1,24 @@
+const { resolve } = require('bluebird');
 const db = require('../config/dataBase')
 const pool = require('../config/dataBasePool')
 
-module.exports = function (sql, callback)  {
-    pool.getConnection((err, con) => {
-        if(err) {
-            return callback(err, null)
-        } else {
-            con.query(sql, (err_2, data) => {
-                if(err_2) {
-                    return callback(err_2, null)
-                } else {
-                    callback(null, data);
-                    pool.releaseConnection(con);
-                }
-            })
-        }
+module.exports =  function (sql)  {
+    return new Promise( (resolve, reject) => {
+        pool.getConnection((err, con) => {
+            if(err) {
+                console.log(err);
+                reject(err)
+            } else {
+                con.query(sql, (err_2, data) => {
+                    if(err_2) {
+                        console.log(err_2);
+                        reject(err)
+                    } else {
+                        pool.releaseConnection(con);
+                        resolve(data)
+                    }
+                })
+            }
+        })  
     });
 }
