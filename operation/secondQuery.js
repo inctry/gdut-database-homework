@@ -1,9 +1,9 @@
 
-let student = require('../table_element/student')
+let student_copy = require('../table_element/student_copy')
 
 async function secondQuery(state) {
 
-    let res = await student.retrive(state)
+    let res = await student_copy.retrive(state)
     return res;
 }
 

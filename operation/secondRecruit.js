@@ -1,5 +1,5 @@
 
-let student = require('../table_element/student')
+let student_copy = require('../table_element/student_copy')
 let university_copy = require('../table_element/university_copy')
 
 
@@ -24,7 +24,7 @@ async function secondRecruit(stu) {
         },
         where: `WHERE 专业代号 = '${major['专业代号']}'`
     })
-    mark = await student.update({
+    mark = await student_copy.update({
         data: {
             最终专业: `'${major['专业名称']}',`,
             录取情况: `'调剂录取'`

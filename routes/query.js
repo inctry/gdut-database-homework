@@ -3,15 +3,16 @@ let router = express.Router();               //放数据
 
 
 
-const firstQuery = require('../operation/firstQuery')
-const studentCount = require('../operation/studentCount')
-const firstRecruit = require('../operation/firstRecruit')
+const firstQuery = require('../operation/firstQuery');
+const studentCount = require('../operation/studentCount');
+const firstRecruit = require('../operation/firstRecruit');
 const restStudentCount = require('../operation/restStudentCount');
 const secondQuery = require('../operation/secondQuery');
 const secondRecruit = require('../operation/secondRecruit');
-const createTable = require('../operation/createTable')
+const createTable = require('../operation/createTable');
+const studentSort = require('../operation/studentSort');
 
-const student = require('../table_element/student');
+const student_copy = require('../table_element/student_copy');
 
 
 /* GET home page. */
@@ -44,22 +45,18 @@ router.get('/', async function (req, res, next) {
 
      await createTable();
 
-     console.log("begin first recruit");
-     const STUDENT_NUMBER = await studentCount();
+    console.log("begin first recruit");
+    const STUDENT_NUMBER = await studentCount();
+
+    // studentSort();
 
     for(let i = 0; i < STUDENT_NUMBER; i++) {
+        // console.log(i);
         let res = await firstQuery({
-            where: null,
-            order: " ORDER BY 排位",
             limit: " LIMIT 1",
             offset: ` OFFSET ${i}`
         });
         let isSuccess = await firstRecruit(res[0])
-
-        // if(!isSuccess) {
-        //     console.log('error when Recruiting');
-        // }
-        //  console.log(i);
     }
 
     console.log("finish first recruit");
@@ -83,7 +80,7 @@ router.get('/', async function (req, res, next) {
     }
 
     console.log("end second recruit");
-    res.json(await student.retrive({
+    res.json(await student_copy.retrive({
         where: 'WHERE 最终专业 IS NOT NULL'
     }) );
 

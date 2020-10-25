@@ -1,6 +1,6 @@
-let university = require('../table_element/university')
+
 let university_copy = require('../table_element/university_copy')
-let student = require('../table_element/student');
+let student_copy = require('../table_element/student_copy');
 const e = require('express');
 
 async function firstRecruit(stu) {
@@ -46,7 +46,7 @@ async function firstRecruit(stu) {
         }
     }
     if(isSuccess === true) {
-        let suc = student.update({
+        let suc = student_copy.update({
             data: {
                 最终专业: `'${major}',`,
                 录取情况: `'拟录取'`

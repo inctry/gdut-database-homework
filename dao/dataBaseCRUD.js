@@ -61,6 +61,9 @@ class Table {
         let res = await connectToDataBase(sql);
         return res;   
     }
+    async sort(state) {
+        let sql = 'SELECT * FROM '
+    }
 
 }
 module.exports = Table
