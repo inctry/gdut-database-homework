@@ -6,9 +6,9 @@
 //     port: 3306
 // }
 module.exports = {
-        host: 'chanx.tech',
+        host: 'localhost',
         user: 'kevin',
         password: '123456',
-        database: 'higheducation',
+        database: 'dataset_higheducation',
         port: 3306
     }

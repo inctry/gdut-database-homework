@@ -48,14 +48,16 @@ router.get('/', async function (req, res, next) {
     console.log("begin first recruit");
     const STUDENT_NUMBER = await studentCount();
 
-    // studentSort();
+    //  studentSort();
 
     for(let i = 0; i < STUDENT_NUMBER; i++) {
         // console.log(i);
         let res = await firstQuery({
-            limit: " LIMIT 1",
-            offset: ` OFFSET ${i}`
+            // limit: " LIMIT 1",
+            // offset: ` OFFSET ${i}`
+             where: `WHERE ID = ${i+1}`
         });
+        // console.log(res[0]);
         let isSuccess = await firstRecruit(res[0])
     }
 
@@ -74,7 +76,7 @@ router.get('/', async function (req, res, next) {
             limit: " LIMIT 1",
         })
         if(res.length === 0) break;
-        console.log(res[0]);
+        // console.log(i);
         let isSuccess = await secondRecruit(res[0]);
         if(!isSuccess) break;
     }
@@ -84,7 +86,7 @@ router.get('/', async function (req, res, next) {
         where: 'WHERE 最终专业 IS NOT NULL'
     }) );
 
-    // console.log(data);
+    //  console.log(data);
     // let sql = 'SELECT * FROM UNIVERSITY'
 
     // connection.query(sql, (err, result) => {

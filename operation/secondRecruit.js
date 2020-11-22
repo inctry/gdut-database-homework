@@ -29,7 +29,8 @@ async function secondRecruit(stu) {
             最终专业: `'${major['专业名称']}',`,
             录取情况: `'调剂录取'`
         },
-        where: `WHERE 姓名 = '${stu['姓名']}' and 排位 = ${stu['排位']}`
+        // where: `WHERE 姓名 = '${stu['姓名']}' and 排位 = ${stu['排位']}`
+        where: `WHERE ID = ${stu[`ID`]}`
     })
 
     return true;
